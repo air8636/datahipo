@@ -1,0 +1,581 @@
+/*
+
+ ============================================================================
+
+ Name        : datahipo.c
+
+ Author      : 
+
+ Version     :
+
+ Copyright   : Your copyright notice
+
+ Description :
+
+ ============================================================================
+
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define INPUT_BUFFER 2
+int x = 200; //I didn't know what size to make the forms so I made it this arbitary length.
+
+typedef struct Patient
+{
+
+	//Increment things with a comma to delimit elements
+
+	//Use a semicolon to do a new line.
+
+	int id;
+
+	char ptnInformation[30];
+
+	//fname,lname,dob,notes;
+
+	char crntPrescriptions[200];
+
+	//medName,dosage,dateFilled;
+
+	char medRecord[200];
+
+	//type,desc,medName,dosage,dateIssued,Note;
+
+	char vtlSigns[200];
+
+	//height,weight,age,bmi,date;
+
+	char smkStatus[1];
+
+	//status(y/n);
+
+	char mdcAllergy[200];
+
+	//medName;
+
+	char problemList[200];
+
+//medName,Procedure,Illness,Vaccination,Date;
+} Paitent;
+
+int clearInteger(int input)
+{
+   input = (int)NULL;
+   return input;
+}
+
+char* clearCharacter(char* input)
+{
+   input = NULL;
+   return input;
+}
+
+//Please for the love of god if you know a better way to do this please do
+Paitent readPatient(int id)
+{
+	//Variables
+	FILE *infile;
+	int catcher1 = 0;
+	Paitent temp;
+	const int tempID = 0;//This is just a path not a fix
+	int loopcntr = 0;
+	//We open the file and check for errors
+
+	infile = fopen("DataHipo.dat", "r");
+
+	if (infile == NULL)
+	{
+		fprintf(stderr, "\nDatabase Error");
+		exit(1);
+	}
+
+	//We look for the location of the patient
+	while (infile || tempID == id)
+	{
+		//I need to fix this
+	}
+
+	//If it exists we return it.
+	if (tempID == id)
+		catcher1 = fread(&temp, sizeof(struct Patient) * loopcntr, 1, infile);
+	fclose(infile);
+	catcher1 = clearInteger(catcher1);
+	return temp;
+}
+
+void writePatient(int id, struct Patient johnSmith)
+
+{
+	//Variables
+	int catcher1 = 0;
+	FILE *outfile;
+	const int tempID = 0; //This is just a patch not a fix.
+	int loopcntr = 0;
+	//We open the file and check for errors
+
+	outfile = fopen("DataHipo.dat", "wr");
+	if (outfile == NULL)
+	{
+
+		fprintf(stderr, "\nDatabase Error");
+		exit(1);
+	}
+
+	//We look for the location of the patient
+
+	while (outfile || tempID == id)
+
+	{
+		//I need to write something that works here
+	}
+
+	//If it exists we write.
+
+	if (tempID == id)
+		catcher1 = fwrite(&johnSmith, (sizeof(struct Patient) * loopcntr), 1, outfile); //I'm hoping this writes over the old patient.
+	else //If patient doesn't exist that means they are new and write eof
+	{
+		catcher1 = fseek(outfile, 0, SEEK_END);
+		catcher1 = fwrite(&johnSmith, sizeof(struct Patient), 1, outfile);
+	}
+
+	fclose(outfile); //House Keeping
+	catcher1 = clearInteger(catcher1);
+	//Function Ends
+
+}
+
+//Needs to have an addition that writes to medFiles
+
+void epatientMenu(struct Patient johnSmith)
+
+{
+
+	//Variables
+	int catcher1 = 0;
+	char tmp[20];
+	char output[120];
+	char* fname = strtok(johnSmith.ptnInformation, ",");
+	char* lname = strtok(johnSmith.ptnInformation, ",");
+	char* dob = strtok(johnSmith.ptnInformation, ",");
+
+	//We print the menu Header
+	printf("Data Hipo - Doctor Portal\n\nE-Prescription\n\n");
+	printf("Patient First Name: %s", fname);
+	printf("Patient Last Name: %s", lname);
+	printf("Date of Birth (%s)\n", dob);
+
+	//We read prescription information from the users possibly needs more error checking
+	printf("Drug:");
+	catcher1 = scanf("%20s", &output[0]);
+	printf("Dosage:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Strength:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Prescription Length:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Prescription Quantity:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Refills(Y/N):");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Directions:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Notes:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Pharmacy:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+	printf("Doctor Authorizing Prescription:");
+	catcher1 = scanf("%20s", &tmp[0]);
+	strcat(output, tmp);
+
+	//We output the data to a file as a deliverable
+	FILE *outfile = fopen("E-Prescription", "w");//"E-Prescription"+fname+"_"+lname
+
+	if (outfile == NULL)
+	{
+		fprintf(stderr, "\nWrite to file Error");
+		exit(1);
+	}
+
+	fprintf(outfile, "E-Prescription order for %s,%s\n%s", fname, lname,output);
+	fclose(outfile);	//House keeping
+	catcher1 =  clearInteger(catcher1);
+	//Function Ends
+
+}
+
+void activeMedList(struct Patient johnSmith)
+
+{
+	//Variables
+	int catcher1 = 0;
+	char* fname = strtok(johnSmith.ptnInformation, ",");
+	char* lname = strtok(johnSmith.ptnInformation, ",");
+	char* dob = strtok(johnSmith.ptnInformation, ",");
+	char userIO;
+	char output[x];
+	char* name;
+	char tmp[x];	//We copy the string for integrity.
+	strcpy(tmp, johnSmith.medRecord);
+	char* tokenA = strtok(tmp, ";");
+
+	printf("Data Hipo - Doctor Portal\n\nActive Medication List\n\n");
+	printf("Patient First Name: %s", fname);
+	printf("Patient Last Name: %s", lname);
+	printf("Date of Birth (%s)\n", dob);
+	printf("\nACTIVE MEDICATIONS:\n-----------------");
+	//While there is still data left to read we cycle though the outer token.
+
+	while (tokenA)
+	{
+		char* tokenB = strtok(tokenA, ",");	//Reads type onto token
+		tokenB = strtok(NULL, ","); //Reads desc onto token
+		name = strtok(NULL, ","); //Reads medName onto token
+		tokenB = strtok(NULL, ","); //Reads dosage onto token
+		tokenB = strtok(NULL, ","); //Reads dateIssued onto token
+		tokenB = strtok(NULL, ","); //Reads note onto token
+		if (strcmp(tokenB, "Active") != 0) //If the note for the medication is correct then we append it to our output
+			{
+				strcat(output, name);
+				strcat(output, "\n");
+		}
+	}
+	//We print our output
+	printf("Data Hipo - Doctor/Nurse\n\nActive Medication List");
+	printf("Patient First Name:%s\nPatient Last Name:%s\nPatient Date of Birth:%s\n",fname, lname, dob);
+	printf("\nACTIVE MEDICATIONS\n-------------------\n%s", output);
+
+	//Exit loop
+
+	while (strncmp(&userIO, "r", 1) != 0)
+	{
+		printf("Enter 'r' to return to the main menu:");
+		catcher1 = scanf("%1s", &userIO);
+	}
+	catcher1 = clearInteger(catcher1);
+	//function ends
+}
+
+//This person who made this form was trash and its implementation is crap because of it.
+
+void cpoeMenu(struct Patient johnSmith)
+
+{
+
+	//Variables
+	int catcher1 = 0;
+	char* fname = strtok(johnSmith.ptnInformation, ",");
+	char* lname = strtok(johnSmith.ptnInformation, ",");
+	char* dob = strtok(johnSmith.ptnInformation, ",");
+	char userIO;
+	char tmp[15];
+	char entry[45];
+	char cpoe[x];
+
+	//We print the header
+
+	printf("Data Hipo - Doctor Portal\n\nComputerized Provider Order Entry (CPOE)\n\n");
+	printf("Patient First Name: %s", fname);
+	printf("Patient Last Name: %s", lname);
+	printf("Date of Birth (%s)\n\n", dob);
+	while (strncmp(&userIO, "r", 1) != 0)
+	{
+		//We print the menu
+		printf("MENU:	(1)Add Past Medication (2) Add Current Medication (3) Add Notes\n\n");
+		printf("Enter an option from the menu above:");
+		//We read the users option and proceed accordingly
+		catcher1 = scanf("%1s", &userIO);
+		printf("\nEnter Activity:");
+		if (strncmp(&userIO, "1", 1) == 0)
+		{
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, tmp); //We format to display correctly
+			strcat(entry, "                               ");
+		}
+		else if (strncmp(&userIO, "2", 1) == 0)
+		{
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, "               "); //We format to display correctly
+			strcat(entry, tmp);
+			strcat(entry, "                ");
+		}
+		else if (strncmp(&userIO, "3", 1) == 0)
+		{
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, "                               "); //We format to display correctly
+			strcat(entry, tmp);
+		}
+
+		printf("Activity Start Date(DDMMYYYY):");
+		catcher1 = scanf("%8s", &tmp[0]);
+		strcat(entry, tmp);
+		strcat(entry, ",");
+
+		printf("Activity End Date(DDMMYYYY):");
+		catcher1 = scanf("%8s", &tmp[0]);
+		strcat(entry, tmp);
+		strcat(entry, cpoe);
+		strcat(entry,"\n");
+		printf(cpoe);
+
+		printf("Enter 'r' to return to the main menu:");
+		catcher1 =scanf("%1s", &userIO);
+
+		catcher1 = clearInteger(catcher1);
+	}
+
+	//We output the data to a file as a deliverable
+
+	FILE *outfile = fopen("CPOE", "w"); //What i want to do for file name but C is a bitch "CPOE"+fname+"_"+lname
+	if (outfile == NULL)
+
+	{
+		fprintf(stderr, "\nWrite to file Error");
+		exit(1);
+	}
+
+	fprintf(outfile, "CPOE for %s,%s\n%s", fname, lname, cpoe);
+	fclose(outfile); //House keeping
+	//Function Ends
+
+}
+
+void maintainPrbList(struct Patient johnSmith)
+
+{
+
+	//Variables
+	int catcher1 = 0;
+	char* fname = strtok(johnSmith.ptnInformation, ",");
+	char* lname = strtok(johnSmith.ptnInformation, ",");
+	char* dob = strtok(johnSmith.ptnInformation, ",");
+	char userIO;
+	char tmp[15];
+	char entry[45];
+	char prblmList[200];
+	//We print the header
+	printf("Data Hipo - Doctor Portal\n\nMaintain Problems List\n\n");
+	printf("Patient First Name: %s", fname);
+	printf("Patient Last Name: %s", lname);
+	printf("Date of Birth (%s)\n\n", dob);
+	while (strncmp(&userIO, "r", 1) != 0)
+	{
+		//We print the menu
+		printf("MENU:	(1)Add Medication (2) Add Procedure (3) Add Illness (4) Add Vaccination \n\n");
+		printf("Enter an option from the menu above:");
+		//We read the users option and proceed accordingly
+		catcher1 = scanf("%1s", &userIO);
+		printf("\nEnter Activity:");
+		if (strncmp(&userIO, "1", 1) == 0)
+		{
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, tmp); //We format to display correctly
+			strcat(entry, "                                                ");
+		}
+		else if (strncmp(&userIO, "2", 1) == 0)
+		{
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, "               "); //We format to display correctly
+			strcat(entry, tmp);
+			strcat(entry, "                              ");
+		}
+		else if (strncmp(&userIO, "3", 1) == 0)
+		{
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, "                               "); //We format to display correctly
+			strcat(entry, tmp);
+			strcat(entry, "               ");
+		}
+		else if (strncmp(&userIO, "4", 1) == 0)
+		{
+
+			catcher1 = scanf("%15s", &tmp[0]);
+			strcat(entry, "                                              "); //We format to display correctly
+			strcat(entry, tmp);
+		}
+
+		printf("Activity Start Date(DDMMYYYY):");
+		catcher1 = scanf("%8s", &tmp[0]);
+		strcat(entry, tmp);
+		strcat(entry, "\n");
+		strcat(prblmList, entry);
+		printf(prblmList);
+		printf("Enter 'r' to return to the main menu:");
+		catcher1 = scanf("%1s", &userIO);
+	}
+	catcher1 = clearInteger(catcher1);
+}
+
+void doctorMenu(int ptnID)
+
+{
+	int start = 0;
+	int catcher1 = 0;
+	char* catcher2;
+	char buffer[INPUT_BUFFER];
+	char verifyEnd;
+	struct Patient patient = readPatient(ptnID);
+
+	//Menu Options for the a user with doctor privileges.
+
+	printf("Data Hipo - Patient Doctor Portal\n\n");
+	printf("Menu: (1) Maintain Problem List    (2) E-Prescription     (3) Active Medication List\n");
+	printf("      (4) Medication Allergy List  (5) Record Vital Signs (6) Record Smoking Status\n");
+	printf("      (7) Computerized Provider Order Entry (CPOE)		  (8) Patient Information\n");
+	printf("      (0) Exit\n");
+
+	printf("Enter an option from the menu above:");
+	catcher2 = fgets(buffer, INPUT_BUFFER,stdin);//I limit the user to only entering 1 digit, I also store the input as an int to let me use it in a switch statement.
+	catcher1 = fseek(stdin, 0, SEEK_END);
+
+    catcher2 = clearCharacter(catcher2);
+	catcher1 = clearInteger(catcher1);
+
+	const size_t checkEnd = (strlen(buffer) - 1);
+	verifyEnd = buffer[checkEnd];
+
+	if(verifyEnd == '\n')
+	{
+	    buffer[checkEnd] = '\0';
+	}
+
+	const int userInput = buffer[start] - '0';
+
+	switch (userInput) //Because of simplicity of the cases I felt that a switch statement suited the task
+	{
+	//Every case just equals a function call to allow easy modularization with other menus
+	case (1):
+		maintainPrbList(patient); //Need to fix an assignment problem here.
+		break;
+	case (2):
+		epatientMenu(patient);
+		break;
+	case (3):
+		activeMedList(patient);
+		break;
+	case (4):
+		//Medication Allergy List
+		break;
+	case (5):
+		//Record Vital Signs
+		break;
+	case (6):
+		//Record Smoking Status
+		break;
+	case (7):
+		cpoeMenu(patient);
+		break;
+	case (8):
+		//Patient Information
+		break;
+	case (0):
+		writePatient(ptnID, patient);
+		printf("Exiting.....");
+		break;
+	}
+}
+
+int main(void) {
+
+	//Variables
+	char uname[8];
+	char pword[8];
+    char* catcher1;
+	char patientID[8];
+	int flag = 0;
+
+	//Intro Message
+
+	printf(
+			"Welcome to Data Hipo - Electronic Medical Record Software (EMS)\n\n\n");
+
+	do
+
+	{	//Loop for user login
+
+		printf("Please enter your login information.\nUsername:");
+		catcher1 = fgets(uname,INPUT_BUFFER, stdin);
+
+		printf("Password:");
+		catcher1 = fgets(pword,INPUT_BUFFER,stdin);
+
+		printf("Patient#");
+		catcher1 = fgets(patientID,INPUT_BUFFER,stdin);//This will be passed to menu function to load patient info.
+
+		//We use nested if statements to check for users that area might be subject to change
+
+		if (strcmp(uname, "admin") == 0)
+		{
+			if (strcmp(pword, "admin!") == 0)
+			{
+				// run admin menu function
+				//please refer to the SDD for how the functions should operate and what the text should look like
+				/*Create account
+				 * Get Number of Accounts
+				 * Delete Accounts					 * Write Logs
+				 * View Logs
+				 */
+				flag = 1;
+			}
+		}
+		else if (strncmp(uname, "doctor", 7) == 0)
+		{
+			if (strncmp(pword, "doctor!", 8) == 0)
+			{
+				doctorMenu(0);
+				flag = 1;
+			}
+		}
+		else if (strncmp(uname, "nurse", 5) == 0)
+		{
+			if (strncmp(pword, "nurse!", 6) == 0)
+			{
+				//run nurse function
+				//please refer to the SDD for how the functions should operate and what the text should look like
+				/*
+				 * Active Mediation List
+				 * Patient Information
+				 * Record Vital Signs
+				 * Record Smoking Status
+				 */
+				flag = 1;
+			}
+		}
+		else if (strncmp(uname, "patient", 7) == 0)
+		{
+			if (strncmp(pword, "patient!", 8) == 0)
+			{
+				//run patient function
+				//please refer to the SDD for how the functions should operate and what the text should look like
+				/*
+				 *Current Prescriptions
+				 * Medical Records
+				 * Appointments
+				 */
+				flag = 1;
+			}
+		}
+		else
+			printf("Invalid username or password.\n");
+
+	} while (flag != 1);
+	//Exit Message
+
+	printf("Thank you for using Data Hipo\nHave a nice day!");
+	catcher1 = clearCharacter(catcher1);
+	return 0;
+
+	//Function Ends
+
+}
+
