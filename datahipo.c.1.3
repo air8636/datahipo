@@ -80,7 +80,7 @@ Paitent readPatient(int id)
 	int catcher1 = 0;
 	Paitent temp;
 	const int tempID = 0;//This is just a path not a fix
-	int loopcntr = 0;
+	const int loopcntr = 0;
 	//We open the file and check for errors
 
 	infile = fopen("DataHipo.dat", "r");
@@ -112,10 +112,10 @@ void writePatient(int id, struct Patient johnSmith)
 	int catcher1 = 0;
 	FILE *outfile;
 	const int tempID = 0; //This is just a patch not a fix.
-	int loopcntr = 0;
+	const int loopcntr = 0;
 	//We open the file and check for errors
 
-	outfile = fopen("DataHipo.dat", "wr");
+	outfile = fopen("DataHipo", "r+");
 	if (outfile == NULL)
 	{
 
@@ -326,7 +326,7 @@ void cpoeMenu(struct Patient johnSmith)
 		strcat(entry, tmp);
 		strcat(entry, cpoe);
 		strcat(entry,"\n");
-		printf(cpoe);
+		printf("%s",cpoe);
 
 		printf("Enter 'r' to return to the main menu:");
 		catcher1 =scanf("%1s", &userIO);
@@ -409,7 +409,7 @@ void maintainPrbList(struct Patient johnSmith)
 		strcat(entry, tmp);
 		strcat(entry, "\n");
 		strcat(prblmList, entry);
-		printf(prblmList);
+		printf("%s",prblmList);
 		printf("Enter 'r' to return to the main menu:");
 		catcher1 = scanf("%1s", &userIO);
 	}
@@ -419,7 +419,6 @@ void maintainPrbList(struct Patient johnSmith)
 void doctorMenu(int ptnID)
 
 {
-	int start = 0;
 	int catcher1 = 0;
 	char* catcher2;
 	char buffer[INPUT_BUFFER];
@@ -449,7 +448,7 @@ void doctorMenu(int ptnID)
 	    buffer[checkEnd] = '\0';
 	}
 
-	const int userInput = buffer[start] - '0';
+	const int userInput = buffer[0] - '0';
 
 	switch (userInput) //Because of simplicity of the cases I felt that a switch statement suited the task
 	{
@@ -482,6 +481,9 @@ void doctorMenu(int ptnID)
 		writePatient(ptnID, patient);
 		printf("Exiting.....");
 		break;
+	default:
+		break;
+
 	}
 }
 
@@ -496,8 +498,7 @@ int main(void) {
 
 	//Intro Message
 
-	printf(
-			"Welcome to Data Hipo - Electronic Medical Record Software (EMS)\n\n\n");
+	printf("Welcome to Data Hipo - Electronic Medical Record Software (EMS)\n\n\n");
 
 	do
 
@@ -578,4 +579,5 @@ int main(void) {
 	//Function Ends
 
 }
+
 
