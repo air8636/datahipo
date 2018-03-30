@@ -26,35 +26,20 @@ typedef struct Patient
 {
 
 	//Increment things with a comma to delimit elements
-
 	//Use a semicolon to do a new line.
-
 	int id;
-
 	char ptnInformation[30];
-
 	//fname,lname,dob,notes;
-
 	char crntPrescriptions[200];
-
 	//medName,dosage,dateFilled;
-
 	char medRecord[200];
-
 	//type,desc,medName,dosage,dateIssued,Note;
-
 	char vtlSigns[200];
-
 	//height,weight,age,bmi,date;
-
 	char smkStatus[1];
-
 	//status(y/n);
-
 	char mdcAllergy[200];
-
 	//medName;
-
 	char problemList[200];
 
 //medName,Procedure,Illness,Vaccination,Date;
@@ -100,6 +85,7 @@ Paitent readPatient(int id)
 	//If it exists we return it.
 	if (tempID == id)
 		catcher1 = fread(&temp, sizeof(struct Patient) * loopcntr, 1, infile);
+		
 	fclose(infile);
 	catcher1 = clearInteger(catcher1);
 	return temp;
@@ -126,7 +112,6 @@ void writePatient(int id, struct Patient johnSmith)
 	//We look for the location of the patient
 
 	while (outfile || tempID == id)
-
 	{
 		//I need to write something that works here
 	}
@@ -245,9 +230,9 @@ void activeMedList(struct Patient johnSmith)
 		tokenB = strtok(NULL, ","); //Reads dateIssued onto token
 		tokenB = strtok(NULL, ","); //Reads note onto token
 		if (strcmp(tokenB, "Active") != 0) //If the note for the medication is correct then we append it to our output
-			{
-				strcat(output, name);
-				strcat(output, "\n");
+		{
+			strcat(output, name);
+			strcat(output, "\n");
 		}
 	}
 	//We print our output
@@ -330,7 +315,6 @@ void cpoeMenu(struct Patient johnSmith)
 
 		printf("Enter 'r' to return to the main menu:");
 		catcher1 =scanf("%1s", &userIO);
-
 		catcher1 = clearInteger(catcher1);
 	}
 
@@ -338,7 +322,6 @@ void cpoeMenu(struct Patient johnSmith)
 
 	FILE *outfile = fopen("CPOE", "w"); //What i want to do for file name but C is a bitch "CPOE"+fname+"_"+lname
 	if (outfile == NULL)
-
 	{
 		fprintf(stderr, "\nWrite to file Error");
 		exit(1);
@@ -487,12 +470,13 @@ void doctorMenu(int ptnID)
 	}
 }
 
-int main(void) {
+int main(void) 
+{
 
 	//Variables
 	char uname[8];
 	char pword[8];
-    char* catcher1;
+    	char* catcher1;
 	char patientID[8];
 	int flag = 0;
 
@@ -501,7 +485,6 @@ int main(void) {
 	printf("Welcome to Data Hipo - Electronic Medical Record Software (EMS)\n\n\n");
 
 	do
-
 	{	//Loop for user login
 
 		printf("Please enter your login information.\nUsername:");
@@ -579,5 +562,3 @@ int main(void) {
 	//Function Ends
 
 }
-
-
