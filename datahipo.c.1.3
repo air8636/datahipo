@@ -20,8 +20,9 @@
 #include <stdlib.h>
 #include <string.h>
 #define INPUT_BUFFER 2
-int x = 200; //I didn't know what size to make the forms so I made it this arbitary length.
+int x = 200; //I didn't know what size to make the forms so I made it this arbitary length. This variable can be deleted if we agree on a size.
 
+//This is structureis designed to hold all the information needed for the doctor,nurse, and paitent menues.
 typedef struct Patient
 {
 
@@ -41,23 +42,24 @@ typedef struct Patient
 	char mdcAllergy[200];
 	//medName;
 	char problemList[200];
-
-//medName,Procedure,Illness,Vaccination,Date;
+	//medName,Procedure,Illness,Vaccination,Date;
 } Paitent;
 
+//This function is to modify an integer to pass rosebud.
 int clearInteger(int input)
 {
    input = (int)NULL;
    return input;
 }
 
+//This funcion is to modify a char* to pass rosebud.
 char* clearCharacter(char* input)
 {
    input = NULL;
    return input;
 }
 
-//Please for the love of god if you know a better way to do this please do
+//This function is not functional. But it is desinged to read a patient structure from a file.
 Paitent readPatient(int id)
 {
 	//Variables
@@ -91,8 +93,8 @@ Paitent readPatient(int id)
 	return temp;
 }
 
+//This function is not functional. But is desgined to write a patient structure to a file.
 void writePatient(int id, struct Patient johnSmith)
-
 {
 	//Variables
 	int catcher1 = 0;
@@ -132,8 +134,7 @@ void writePatient(int id, struct Patient johnSmith)
 
 }
 
-//Needs to have an addition that writes to medFiles
-
+//This function displays a form for the doctor to fill out then outputs the informatino to a text document.
 void epatientMenu(struct Patient johnSmith)
 
 {
@@ -199,8 +200,8 @@ void epatientMenu(struct Patient johnSmith)
 
 }
 
+//This is a redundan function that is designed to output all of the active medication a paitent is taking.
 void activeMedList(struct Patient johnSmith)
-
 {
 	//Variables
 	int catcher1 = 0;
@@ -219,8 +220,8 @@ void activeMedList(struct Patient johnSmith)
 	printf("Patient Last Name: %s", lname);
 	printf("Date of Birth (%s)\n", dob);
 	printf("\nACTIVE MEDICATIONS:\n-----------------");
+	
 	//While there is still data left to read we cycle though the outer token.
-
 	while (tokenA)
 	{
 		char* tokenB = strtok(tokenA, ",");	//Reads type onto token
@@ -235,13 +236,13 @@ void activeMedList(struct Patient johnSmith)
 			strcat(output, "\n");
 		}
 	}
+	
 	//We print our output
 	printf("Data Hipo - Doctor/Nurse\n\nActive Medication List");
 	printf("Patient First Name:%s\nPatient Last Name:%s\nPatient Date of Birth:%s\n",fname, lname, dob);
 	printf("\nACTIVE MEDICATIONS\n-------------------\n%s", output);
 
-	//Exit loop
-
+	//Exit Menu loop.
 	while (strncmp(&userIO, "r", 1) != 0)
 	{
 		printf("Enter 'r' to return to the main menu:");
@@ -251,10 +252,8 @@ void activeMedList(struct Patient johnSmith)
 	//function ends
 }
 
-//This person who made this form was trash and its implementation is crap because of it.
-
+//This function creats a form to be filled out by the doctor and then outputs the resuts to a text file.
 void cpoeMenu(struct Patient johnSmith)
-
 {
 
 	//Variables
@@ -268,11 +267,11 @@ void cpoeMenu(struct Patient johnSmith)
 	char cpoe[x];
 
 	//We print the header
-
 	printf("Data Hipo - Doctor Portal\n\nComputerized Provider Order Entry (CPOE)\n\n");
 	printf("Patient First Name: %s", fname);
 	printf("Patient Last Name: %s", lname);
 	printf("Date of Birth (%s)\n\n", dob);
+	
 	while (strncmp(&userIO, "r", 1) != 0)
 	{
 		//We print the menu
@@ -319,7 +318,6 @@ void cpoeMenu(struct Patient johnSmith)
 	}
 
 	//We output the data to a file as a deliverable
-
 	FILE *outfile = fopen("CPOE", "w"); //What i want to do for file name but C is a bitch "CPOE"+fname+"_"+lname
 	if (outfile == NULL)
 	{
@@ -334,7 +332,6 @@ void cpoeMenu(struct Patient johnSmith)
 }
 
 void maintainPrbList(struct Patient johnSmith)
-
 {
 
 	//Variables
@@ -346,16 +343,19 @@ void maintainPrbList(struct Patient johnSmith)
 	char tmp[15];
 	char entry[45];
 	char prblmList[200];
+	
 	//We print the header
 	printf("Data Hipo - Doctor Portal\n\nMaintain Problems List\n\n");
 	printf("Patient First Name: %s", fname);
 	printf("Patient Last Name: %s", lname);
 	printf("Date of Birth (%s)\n\n", dob);
+	
 	while (strncmp(&userIO, "r", 1) != 0)
 	{
 		//We print the menu
 		printf("MENU:	(1)Add Medication (2) Add Procedure (3) Add Illness (4) Add Vaccination \n\n");
 		printf("Enter an option from the menu above:");
+		
 		//We read the users option and proceed accordingly
 		catcher1 = scanf("%1s", &userIO);
 		printf("\nEnter Activity:");
@@ -393,14 +393,15 @@ void maintainPrbList(struct Patient johnSmith)
 		strcat(entry, "\n");
 		strcat(prblmList, entry);
 		printf("%s",prblmList);
+		
 		printf("Enter 'r' to return to the main menu:");
 		catcher1 = scanf("%1s", &userIO);
 	}
 	catcher1 = clearInteger(catcher1);
 }
 
+//This function displays all of the choices for the doctor user to select.
 void doctorMenu(int ptnID)
-
 {
 	int catcher1 = 0;
 	char* catcher2;
@@ -420,7 +421,7 @@ void doctorMenu(int ptnID)
 	catcher2 = fgets(buffer, INPUT_BUFFER,stdin);//I limit the user to only entering 1 digit, I also store the input as an int to let me use it in a switch statement.
 	catcher1 = fseek(stdin, 0, SEEK_END);
 
-    catcher2 = clearCharacter(catcher2);
+    	catcher2 = clearCharacter(catcher2);
 	catcher1 = clearInteger(catcher1);
 
 	const size_t checkEnd = (strlen(buffer) - 1);
