@@ -1,5 +1,4 @@
 /*
-
  ============================================================================
 
  Name        : datahipo.c
@@ -13,19 +12,20 @@
  Description :
 
  ============================================================================
-
  */
 
+//Include Libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+//Variables needed for system operation.
 #define INPUT_BUFFER 2
-int x = 200; //I didn't know what size to make the forms so I made it this arbitary length. This variable can be deleted if we agree on a size.
+#define x 200 //I didn't know what size to make the forms so I made it this arbitary length. This variable can be deleted if we agree on a size.
 
 //This is structureis designed to hold all the information needed for the doctor,nurse, and paitent menues.
 typedef struct Patient
 {
-
 	//Increment things with a comma to delimit elements
 	//Use a semicolon to do a new line.
 	int id;
@@ -45,6 +45,8 @@ typedef struct Patient
 	//medName,Procedure,Illness,Vaccination,Date;
 } Paitent;
 
+//Begin System Functions--------------------------------------------------------------------------------------------------------
+
 //This function is to modify an integer to pass rosebud.
 int clearInteger(int input)
 {
@@ -58,6 +60,7 @@ char* clearCharacter(char* input)
    input = NULL;
    return input;
 }
+
 
 //This function is not functional. But it is desinged to read a patient structure from a file.
 Paitent readPatient(int id)
@@ -133,10 +136,16 @@ void writePatient(int id, struct Patient johnSmith)
 	//Function Ends
 
 }
+//End System Functions-------------------------------------------------------------------------------------------------------
+
+//Begin Admin Menu----------------------------------------------------------------------------------------------------------
+
+//End Admin Menu------------------------------------------------------------------------------------------------------------
+
+//Begin Doctor Menu----------------------------------------------------------------------------------------------------------
 
 //This function displays a form for the doctor to fill out then outputs the informatino to a text document.
 void epatientMenu(struct Patient johnSmith)
-
 {
 
 	//Variables
@@ -470,6 +479,16 @@ void doctorMenu(int ptnID)
 
 	}
 }
+//End Doctor Menu------------------------------------------------------------------------------------------------------------
+
+
+//Begin Nurse Menu----------------------------------------------------------------------------------------------------------
+
+//End Nurse Menu------------------------------------------------------------------------------------------------------------
+
+//Begin Patient Menu--------------------------------------------------------------------------------------------------------
+
+//End Patient Menu----------------------------------------------------------------------------------------------------------
 
 int main(void) 
 {
